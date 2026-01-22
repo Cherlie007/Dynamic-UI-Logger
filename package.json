@@ -16,6 +16,10 @@
     "dist",
     "README.md"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Cherlie007/Dynamic-UI-Logger.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
