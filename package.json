@@ -1,0 +1,53 @@
+{
+  "name": "dynamic-ui-logger",
+  "version": "1.0.0",
+  "description": "A React TypeScript library for logging UI interactions and events",
+  "main": "./dist/dynamic-ui-logger.cjs",
+  "module": "./dist/dynamic-ui-logger.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/dynamic-ui-logger.js",
+      "require": "./dist/dynamic-ui-logger.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "type-check": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "react",
+    "typescript",
+    "logger",
+    "ui-logger",
+    "event-tracking",
+    "analytics"
+  ],
+  "author": "Subhasis Bhattacharya",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  },
+  "devDependencies": {
+    "@types/prop-types": "^15.7.15",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.3.0",
+    "vite": "^5.0.0",
+    "vite-plugin-dts": "^3.7.0"
+  },
+  "dependencies": {
+    "react-idle-timer": "^5.7.2"
+  }
+}

@@ -1,0 +1,10 @@
+src
+example
+.vscode
+.idea
+*.log
+tsconfig.json
+vite.config.ts
+.gitignore
+.git
+node_modules
