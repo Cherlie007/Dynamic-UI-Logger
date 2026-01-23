@@ -1,11 +1,3 @@
-export interface UILogEntry {
-    id: string;
-    timestamp: number;
-    type: 'click' | 'input' | 'navigation' | 'custom' | 'api';
-    target?: string;
-    value?: string | number | boolean;
-    metadata?: Record<string, any>;
-}
 
 export interface APILogEntry {
     url: string;
@@ -19,7 +11,8 @@ export interface APILogEntry {
 export interface UILoggerConfig {
     maxLogSize?: number;
     enableTimestamps?: boolean;
-    autoCapture?: boolean;
+    autoCaptureEvents?: boolean;
+    autoCaptureAPI?: boolean;
     apiUrl?: string;
     apiHeader?: Record<string, string>;
     idleTime?: number;

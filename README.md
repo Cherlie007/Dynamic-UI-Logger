@@ -126,7 +126,8 @@ The `useUILogger` hook accepts a configuration object with the following options
 | `sendDebugLogToApi` | `boolean` | `false` | Whether to send debug logs to the API on flush |
 | `sendErrorLogToApi` | `boolean` | `false` | Whether to immediately send error logs to the API |
 | `enableTimestamps` | `boolean` | `true` | Include timestamps in log entries |
-| `autoCapture` | `boolean` | `false` | Enable automatic UI event capturing |
+| `autoCaptureEvents` | `boolean` | `false` | Enable automatic UI event capturing (errors, rejections) |
+| `autoCaptureAPI` | `boolean` | `false` | Enable automatic API call interception for error context |
 
 ### Example Configuration
 
@@ -218,13 +219,18 @@ Dynamic UI Logger automatically captures:
 
 - **Unhandled Errors**: JavaScript errors that bubble up to the window level
 - **Unhandled Promise Rejections**: Promises that reject without a `.catch()` handler
+- **API Context**: If `autoCaptureAPI` is enabled, the last intercepted API call (`fetch` or `XHR`) is included in the error log for better debugging context.
 
 ```typescript
-// Automatically captured!
-throw new Error('Uncaught error');
+// Enable auto-capture in config
+const logger = useUILogger({
+    autoCaptureEvents: true,
+    autoCaptureAPI: true,
+    // ...
+});
 
-// Also automatically captured!
-Promise.reject('Unhandled rejection');
+// Automatically captured with context!
+throw new Error('Uncaught error');
 ```
 
 ---
@@ -233,6 +239,7 @@ Promise.reject('Unhandled rejection');
 
 When logs are flushed to your API, they are sent in the following format:
 
+**Standard Log:**
 ```json
 {
     "header": {
@@ -241,6 +248,15 @@ When logs are flushed to your API, they are sent in the following format:
         // ...your custom headers
     },
     "logs": "[\"Log message 1\", \"Log message 2\"]",
+    "timestamp": 1705927385123
+}
+```
+
+**Error Log (with API Context):**
+```json
+{
+    "header": { ... },
+    "logs": "[{ \"error\": \"Failed to fetch data\", \"stack\": \"...\", \"lastApiCall\": { \"url\": \"/api/data\", \"method\": \"GET\", \"status\": 500, \"timestamp\": ... } }]",
     "timestamp": 1705927385123
 }
 ```
@@ -265,12 +281,23 @@ Dynamic UI Logger automatically detects the environment:
 export interface UILoggerConfig {
     maxLogSize?: number;           // Buffer size limit
     enableTimestamps?: boolean;    // Enable timestamps
-    autoCapture?: boolean;         // Auto-capture UI events
+    autoCaptureEvents?: boolean;   // Auto-capture UI events
+    autoCaptureAPI?: boolean;      // Auto-capture API calls
     apiUrl?: string;               // API endpoint URL
     apiHeader?: Record<string, string>;  // Custom headers
     idleTime?: number;             // Idle timeout (ms)
     sendDebugLogToApi?: boolean;   // Send debug logs
     sendErrorLogToApi?: boolean;   // Send error logs
+}
+
+// API Log Entry (captured context)
+export interface APILogEntry {
+    url: string;
+    method: string;
+    status?: number;
+    timestamp: number;
+    payload?: any;
+    response?: any;
 }
 
 // Logger instance interface

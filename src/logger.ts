@@ -5,7 +5,12 @@ import { useIdleTimer } from "react-idle-timer";
 let loggerInstance: UILoggerInstance | null = null;
 let lastApiCall: APILogEntry | null = null;
 
+let isIntercepted = false;
+
 const interceptApiCalls = () => {
+    if (isIntercepted) return;
+    isIntercepted = true;
+
     const originalFetch = window.fetch;
     window.fetch = async (...args) => {
         const [resource, config] = args;
@@ -67,7 +72,6 @@ declare global {
     }
 }
 
-interceptApiCalls();
 
 export const useUILogger = (config: UILoggerConfig) => {
     if (loggerInstance) {
@@ -81,6 +85,8 @@ export const useUILogger = (config: UILoggerConfig) => {
     const sendDebugLogToApi = config.sendDebugLogToApi || false;
     const sendErrorLogToApi = config.sendErrorLogToApi || false;
     const header = config.apiHeader || {};
+    const autoCaptureEvents = config.autoCaptureEvents || false;
+    const autoCaptureAPI = config.autoCaptureAPI || false;
 
     const postMessage = (
         type: 'log' | 'error' | 'flush',
@@ -134,9 +140,14 @@ export const useUILogger = (config: UILoggerConfig) => {
         error(new Error(`Unhandled Rejection: ${event.reason}`));
     };
 
-    window?.addEventListener('error', handleGlobalError);
-    window?.addEventListener('unhandledrejection', handleGlobalUnhandledRejection);
+    if (autoCaptureEvents) {
+        window?.addEventListener('error', handleGlobalError);
+        window?.addEventListener('unhandledrejection', handleGlobalUnhandledRejection);
+    }
 
+    if (autoCaptureAPI) {
+        interceptApiCalls();
+    }
 
     loggerInstance = {
         log,

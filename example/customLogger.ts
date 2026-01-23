@@ -17,6 +17,8 @@ const getLogger = () => {
             idleTime: 30000,          // Auto-flush after 30 seconds of inactivity
             sendDebugLogToApi: true,  // Send debug logs to API
             sendErrorLogToApi: true,  // Send error logs to API
+            autoCaptureEvents: true,  // Auto-capture UI events
+            autoCaptureAPI: true,     // Auto-capture API calls
         });
     }
     return logger;
