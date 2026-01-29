@@ -1,6 +1,6 @@
 {
   "name": "dynamic-ui-logger",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A React TypeScript library for logging UI interactions and events",
   "main": "./dist/dynamic-ui-logger.cjs",
   "module": "./dist/dynamic-ui-logger.js",
