@@ -38,6 +38,22 @@ const App: React.FC = () => {
         error('Custom error message: Something went wrong!');
     };
 
+    // Example: Handle null error simulation
+    const handleSimulateNullError = () => {
+        try {
+            // Simulate accessing property on null
+            const nullObject = null;
+            // Add null check before accessing properties
+            if (nullObject && nullObject.name) {
+                console.log(nullObject.name);
+            } else {
+                console.log('Object is null or missing name property');
+            }
+        } catch (err) {
+            error(err as Error);
+        }
+    };
+
     // Example: Manually flush logs
     const handleFlushLogs = () => {
         flush();
@@ -84,8 +100,11 @@ const App: React.FC = () => {
                 <button onClick={handleTriggerError} style={{ marginRight: '10px' }}>
                     Trigger Error (try/catch)
                 </button>
-                <button onClick={handleLogCustomError}>
+                <button onClick={handleLogCustomError} style={{ marginRight: '10px' }}>
                     Log Custom Error
+                </button>
+                <button onClick={handleSimulateNullError}>
+                    Simulate Null Error
                 </button>
             </section>
 
