@@ -87,6 +87,7 @@ export const useUILogger = (config: UILoggerConfig) => {
     const header = config.apiHeader || {};
     const autoCaptureEvents = config.autoCaptureEvents || false;
     const autoCaptureAPI = config.autoCaptureAPI || false;
+    const sessionId = `UILOGGER_${crypto.randomUUID()}`;
 
     const postMessage = (
         type: 'log' | 'error' | 'flush',
@@ -101,6 +102,7 @@ export const useUILogger = (config: UILoggerConfig) => {
             header,
             sendDebugLogToApi,
             sendErrorLogToApi,
+            sessionId
         });
     };
 

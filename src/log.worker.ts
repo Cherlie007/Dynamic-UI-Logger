@@ -3,7 +3,7 @@ export default (): void => {
 
     let logs: string[] = [];
 
-    const sendLogsToApi = (apiUrl: string, header: Record<string, string>): void => {
+    const sendLogsToApi = (apiUrl: string, header: Record<string, string>, sessionId: string): void => {
         if (logs.length > 0) {
             const defaultHeaders = {
                 action: "auditClientLogs",
@@ -13,6 +13,7 @@ export default (): void => {
                 header: header && Object.keys(header).length > 0 ? header : defaultHeaders,
                 logs: JSON.stringify(logs),
                 timestamp: Date.now(),
+                sid: sessionId
             }
             fetch(apiUrl, {
                 method: 'POST',
@@ -40,6 +41,7 @@ export default (): void => {
             header,
             sendDebugLogToApi,
             sendErrorLogToApi,
+            sessionId
         } = event.data;
 
         if (isDev) {
@@ -57,12 +59,12 @@ export default (): void => {
             case 'error':
                 logs.push(message);
                 if (sendErrorLogToApi) {
-                    sendLogsToApi(apiUrl, header);
+                    sendLogsToApi(apiUrl, header, sessionId);
                 }
                 break;
             case 'flush':
                 if(sendDebugLogToApi) {
-                    sendLogsToApi(apiUrl, header);
+                    sendLogsToApi(apiUrl, header, sessionId);
                 }
                 break;
             default:

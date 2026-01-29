@@ -2,14 +2,26 @@ import React, { useState } from 'react';
 import getLogger from './customLogger';
 
 const App: React.FC = () => {
-    const {log, error, flush} = getLogger();
+    const { log, error, flush } = getLogger();
     const [inputValue, setInputValue] = useState('');
     const [counter, setCounter] = useState(0);
+
+    const [userData, setUserData] = useState<{ name: string } | null>(null);
 
     // Example: Log button clicks
     const handleButtonClick = () => {
         setCounter(prev => prev + 1);
         log(`Button clicked - Counter is now: ${counter + 1}`);
+    };
+
+    // Example: Simulate an actual error (Null check issue)
+    const handleSimulateNullError = () => {
+        try {
+            // This will throw: Cannot read properties of null (reading 'name')
+            log(`User name: ${userData!.name}`);
+        } catch (err) {
+            error(err as Error);
+        }
     };
 
     // Example: Log input changes
@@ -84,8 +96,11 @@ const App: React.FC = () => {
                 <button onClick={handleTriggerError} style={{ marginRight: '10px' }}>
                     Trigger Error (try/catch)
                 </button>
-                <button onClick={handleLogCustomError}>
+                <button onClick={handleLogCustomError} style={{ marginRight: '10px' }}>
                     Log Custom Error
+                </button>
+                <button onClick={handleSimulateNullError} style={{ backgroundColor: '#ffcccc' }}>
+                    Simulate Null Error
                 </button>
             </section>
 
