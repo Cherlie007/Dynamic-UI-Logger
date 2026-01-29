@@ -33,6 +33,17 @@ const App: React.FC = () => {
         }
     };
 
+    // Example: Simulate null error (FIXED)
+    const handleSimulateNullError = () => {
+        try {
+            // Simulate accessing property on null object
+            const nullObject: any = null;
+            console.log(nullObject.name); // This would cause the error
+        } catch (err) {
+            error(err as Error);
+        }
+    };
+
     // Example: Log a custom error message
     const handleLogCustomError = () => {
         error('Custom error message: Something went wrong!');
@@ -84,8 +95,11 @@ const App: React.FC = () => {
                 <button onClick={handleTriggerError} style={{ marginRight: '10px' }}>
                     Trigger Error (try/catch)
                 </button>
-                <button onClick={handleLogCustomError}>
+                <button onClick={handleLogCustomError} style={{ marginRight: '10px' }}>
                     Log Custom Error
+                </button>
+                <button onClick={handleSimulateNullError}>
+                    Simulate Null Error
                 </button>
             </section>
 
